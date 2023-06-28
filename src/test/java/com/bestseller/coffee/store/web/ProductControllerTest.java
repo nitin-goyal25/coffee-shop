@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 
 import com.bestseller.coffee.store.CoffeeStoreApplicationTests;
 
-public class ProductControllerTest extends CoffeeStoreApplicationTests {
+class ProductControllerTest extends CoffeeStoreApplicationTests {
 
 	@Test
 	void listProducts() throws Exception {

@@ -14,8 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import com.bestseller.coffee.store.CoffeeStoreApplicationTests;
-
-public class ToppingControllerTest extends CoffeeStoreApplicationTests {
+class ToppingControllerTest extends CoffeeStoreApplicationTests {
 
 	@Test
 	void listtoppings() throws Exception {

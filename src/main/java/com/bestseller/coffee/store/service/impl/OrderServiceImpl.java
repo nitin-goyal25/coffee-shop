@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public OrderDTO addProducts(@Valid OrderDTO request) {
 		double totalAmount = 0;
-		List<Double> totalAmountList = new ArrayList<Double>();
+		List<Double> totalAmountList = new ArrayList<>();
 		totalAmountList.add(totalAmount);
 		if (!request.getProducts().isEmpty()) {
 			List<OrderProductDTO> productList = request.getProducts();
@@ -60,11 +60,10 @@ public class OrderServiceImpl implements OrderService {
 			amount = amount + Double.valueOf(productObject.get().getCost());
 			if (!product.getToppings().isEmpty()) {
 				List<OrderToppingDTO> toppingList = product.getToppings();
-				List<Long> toppingIdList = toppingList.stream().map(topping -> topping.getId())
-						.collect(Collectors.toList());
+				List<Long> toppingIdList = toppingList.stream().map(OrderToppingDTO::getId).toList();
 				List<String> toppingCostList = toppingsRepository.findPriceForEachTopping(toppingIdList);
 				updateToppingUsedCount(toppingIdList);
-				amount = amount + toppingCostList.stream().mapToDouble(cost -> Double.valueOf(cost)).sum();
+				amount = amount + toppingCostList.stream().mapToDouble(Double::valueOf).sum();
 			}
 		}
 		return amount;
@@ -79,23 +78,22 @@ public class OrderServiceImpl implements OrderService {
 	public OrderDTO calculateFinalDiscountedAmount(@Valid OrderDTO request) {
 		List<Double> indivaidualOrderPriceList = null;
 		if (!request.getProducts().isEmpty()) {
-			indivaidualOrderPriceList = request.getProducts().stream().map(product -> product.getProductAmount())
-					.collect(Collectors.toList());
+			indivaidualOrderPriceList = request.getProducts().stream().map(OrderProductDTO::getProductAmount).collect(Collectors.toList());
 			request.setDiscountedAmount(getDiscountedAmount(indivaidualOrderPriceList, request.getCartAmount()));
 		}
 		return request;
 	}
 
 	private double getDiscountedAmount(List<Double> indivaidualOrderPriceList, double totalAmount) {
-		if (indivaidualOrderPriceList.size() >= CoffeeStoreConstants.eligibleCartSizeForDiscount
-				&& totalAmount > CoffeeStoreConstants.elgibaleCartAmountforDiscount) {
+		if (indivaidualOrderPriceList.size() >= CoffeeStoreConstants.ELIGIBLE_CART_SIZE_DISCOUNT
+				&& totalAmount > CoffeeStoreConstants.ELIGIBLE_CART_AMOUNT_DISCOUNT) {
 			double minusOneAmount = getAmountMinusOneOrder(indivaidualOrderPriceList, totalAmount);
 			double minusOfferedDiscountAmount = getMinusOfferedDiscountedAmount(totalAmount);
 			totalAmount = minusOneAmount > minusOfferedDiscountAmount ? minusOfferedDiscountAmount : minusOneAmount;
-		} else if (indivaidualOrderPriceList.size() >= CoffeeStoreConstants.eligibleCartSizeForDiscount) {
+		} else if (indivaidualOrderPriceList.size() >= CoffeeStoreConstants.ELIGIBLE_CART_SIZE_DISCOUNT) {
 			double minusOneAmount = getAmountMinusOneOrder(indivaidualOrderPriceList, totalAmount);
 			totalAmount = minusOneAmount;
-		} else if (totalAmount > CoffeeStoreConstants.elgibaleCartAmountforDiscount) {
+		} else if (totalAmount > CoffeeStoreConstants.ELIGIBLE_CART_AMOUNT_DISCOUNT) {
 			double minusOfferedDiscountAmount = getMinusOfferedDiscountedAmount(totalAmount);
 			totalAmount = minusOfferedDiscountAmount;
 		}
@@ -103,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	private double getMinusOfferedDiscountedAmount(double totalAmount) {
-		return (double) (totalAmount * ((100 - CoffeeStoreConstants.offeredDiscount) / 100.0f));
+		return (totalAmount * ((100 - CoffeeStoreConstants.OFFERED_DISCOUNT) / 100.0f));
 	}
 
 	private double getAmountMinusOneOrder(List<Double> indivaidualOrderPriceList, Double totalAmount) {

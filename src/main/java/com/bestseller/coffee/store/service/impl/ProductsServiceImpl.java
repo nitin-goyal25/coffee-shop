@@ -30,7 +30,7 @@ public class ProductsServiceImpl implements ProductsService {
 	public List<DrinksResponse> getAllProducts() {
 		log.debug("Inside getAllProducts service");
 		List<Product> productList = productRepository.findAll();
-		List<DrinksResponse> drinks = new ArrayList<DrinksResponse>();
+		List<DrinksResponse> drinks = new ArrayList<>();
 		if (!productList.isEmpty()) {
 			productList.forEach(product -> {
 				DrinksResponse drink = DrinksResponse.builder().name(product.getName()).cost(product.getCost())

@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 
 import com.bestseller.coffee.store.CoffeeStoreApplicationTests;
 
-public class OrderControllerTest extends CoffeeStoreApplicationTests {
+class OrderControllerTest extends CoffeeStoreApplicationTests {
 
 	@Test
 	void addproductAndCalculateCartValue() throws Exception {

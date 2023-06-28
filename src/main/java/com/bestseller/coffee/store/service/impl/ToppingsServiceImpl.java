@@ -29,7 +29,7 @@ public class ToppingsServiceImpl implements ToppingsService {
 	public List<ToppingResponse> getAllToppings() {
 		log.debug("Inside getAllToppings service");
 		List<Toppings> toppingsList = toppingsRepository.findAll();
-		List<ToppingResponse> toppings = new ArrayList<ToppingResponse>();
+		List<ToppingResponse> toppings = new ArrayList<>();
 		if (!toppingsList.isEmpty()) {
 			toppingsList.forEach(toppingObject -> {
 				ToppingResponse topping = ToppingResponse.builder().name(toppingObject.getName())
